@@ -14,6 +14,7 @@ from flask import (
 print(device_lib.list_local_devices())
 
 learning_rate = 0.004
+# Load the model file here
 model = tf.keras.models.load_model("model7.h5", compile=False)
 model.compile(
     optimizer=tf.keras.optimizers.Adamax(
@@ -33,8 +34,7 @@ app = Flask(
     static_folder="./static",
 )
 
-app.config["IMAGE_UPLOADS"] = r"H:\Lucius\code\BBCS2023\upload"
-
+app.config["IMAGE_UPLOADS"] = os.path.join(os.getcwd(), "upload")
 
 @app.route("/hello")
 def hello_world():
