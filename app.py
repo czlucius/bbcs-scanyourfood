@@ -14,7 +14,7 @@ from flask import (
 print(device_lib.list_local_devices())
 
 learning_rate = 0.004
-model = tf.keras.models.load_model("training2/model7.h5", compile=False)
+model = tf.keras.models.load_model("model7.h5", compile=False)
 model.compile(
     optimizer=tf.keras.optimizers.Adamax(
         learning_rate=learning_rate
