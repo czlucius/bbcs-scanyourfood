@@ -55,7 +55,7 @@ for images, labels in train_ds.take(1):
 """
 
 regularise = {
-"kernel_regularizer": regularizers.L1L2(l1=1e-5, l2=1e-4),
+"kernel_regularizer": regularizers.L1L2(l1=1e-5, l2=1e-3),
 "bias_regularizer": regularizers.L2(1e-4),
 "activity_regularizer": regularizers.L2(1e-5)}
 
@@ -75,7 +75,7 @@ model = tf.keras.Sequential(
         layers.MaxPooling2D(pool_size=[2, 2], strides=2),
         layers.Conv2D(2 * filters, 3, padding="same", activation="swish", **regularise),  # Convolution
         layers.MaxPooling2D(pool_size=[2, 2], strides=2),
-        layers.Conv2D(4 * filters, 3, padding="same", activation="swish", **regularise),  # Convolution
+        # layers.Conv2D(4 * filters, 3, padding="same", activation="swish", **regularise),  # Convolution
         layers.Conv2D(4 * filters, 3, padding="same", activation="swish", **regularise),  # Convolution
         layers.MaxPooling2D(pool_size=[2, 2], strides=2),
         layers.Flatten(),
@@ -83,7 +83,7 @@ model = tf.keras.Sequential(
         layers.Dropout(rate=dropout_rate),
         layers.Dense(no_neurons_per_layer, activation="swish", **regularise),
         layers.Dropout(rate=dropout_rate),
-        layers.Dense(no_neurons_per_layer, activation="swish", **regularise),
+        # layers.Dense(no_neurons_per_layer, activation="swish", **regularise),
         # layers.Dropout(rate=dropout_rate),
         # layers.Dense(no_neurons_per_layer, activation="swish", **regularise), # softmax on the last layer
         
@@ -91,6 +91,7 @@ model = tf.keras.Sequential(
     ],
     name="FoodClassifier",
 )
+
 
 
 """
@@ -110,10 +111,13 @@ model.compile(
 )
 model.summary()
 
+callbacks =  [
+    tf.keras.callbacks.EarlyStopping(monitor='val_binary_crossentropy', patience=200)]
+
 
 # while True:
 #     plt.waitforbuttonpress()
-model.fit(train_ds, validation_data=test_ds, epochs=20)
+model.fit(train_ds, validation_data=test_ds, epochs=20, callbacks=callbacks)
 model.save(f"model10.h5")
 
 # model.predict()
